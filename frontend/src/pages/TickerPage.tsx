@@ -100,7 +100,7 @@ export const TickerPage = () => {
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
           Prediction Analysis
         </h2>
-        <PredictionCard data={prediction} isLoading={predictionLoading} />
+        {prediction && <PredictionCard data={prediction} isLoading={predictionLoading} />}
       </div>
 
       {/* Sentiment Analysis */}

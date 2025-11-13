@@ -50,7 +50,7 @@ export const DashboardPage = () => {
             placeholder="Search for a ticker symbol to get predictions..."
           />
         </div>
-        {selectedSymbol && (
+        {selectedSymbol && prediction && (
           <div className="mt-4">
             <PredictionCard data={prediction} isLoading={predictionLoading} />
           </div>

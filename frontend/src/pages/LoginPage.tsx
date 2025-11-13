@@ -37,8 +37,10 @@ export const LoginPage = () => {
                 className="w-12 h-12 object-contain"
                 onError={(e) => {
                   // Fallback to emoji if image fails to load
-                  e.currentTarget.style.display = 'none'
-                  e.currentTarget.nextElementSibling!.style.display = 'block'
+                  const target = e.currentTarget as HTMLImageElement
+                  target.style.display = 'none'
+                  const nextSibling = target.nextElementSibling as HTMLElement
+                  if (nextSibling) nextSibling.style.display = 'block'
                 }}
               />
               <span className="text-white text-4xl hidden">🪶</span>

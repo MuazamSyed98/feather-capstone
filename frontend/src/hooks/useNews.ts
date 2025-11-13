@@ -10,10 +10,10 @@ export const useSymbolNews = (symbol: string, limit = 20) => {
   })
 }
 
-export const useGlobalNews = (limit = 50, symbol?: string) => {
+export const useGlobalNews = (limit = 50) => {
   return useQuery({
-    queryKey: ['news', 'global', limit, symbol],
-    queryFn: () => newsApi.getGlobalNews(limit, symbol),
+    queryKey: ['news', 'global', limit],
+    queryFn: () => newsApi.getGlobalNews(limit),
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 }

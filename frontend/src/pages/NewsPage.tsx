@@ -7,7 +7,7 @@ import { TickerSearch } from '@/components/TickerSearch'
 export const NewsPage = () => {
   const [selectedSymbol, setSelectedSymbol] = useState<string | undefined>()
   const [limit, setLimit] = useState(50)
-  const { data: news, isLoading, error } = useGlobalNews(limit, selectedSymbol)
+  const { data: news, isLoading, error } = useGlobalNews(limit)
 
   const handleSymbolSelect = (symbol: string) => {
     setSelectedSymbol(symbol)

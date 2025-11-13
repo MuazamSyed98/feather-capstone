@@ -90,11 +90,12 @@ export const AdvancedChart = ({
     })
   }
 
-  const calculateEMA = (period: number) => {
+  const calculateEMA = (period: number): number[] => {
     const multiplier = 2 / (period + 1)
     return chartData.map((d, i) => {
       if (i === 0) return d.close
-      const prevEMA = calculateEMA(period)[i - 1] || d.close
+      const prevEMAs = calculateEMA(period)
+      const prevEMA: number = prevEMAs[i - 1] || d.close
       return (d.close - prevEMA) * multiplier + prevEMA
     })
   }

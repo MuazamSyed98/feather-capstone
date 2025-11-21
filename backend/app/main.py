@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.core.config import settings
 from app.api import auth, tickers, news, watchlist, alerts
 from app.db.init_db import init_db
 

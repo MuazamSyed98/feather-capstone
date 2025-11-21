@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Literal, Dict, Any
+from typing import List, Literal
 from datetime import datetime
 
 class AlertRule(BaseModel):

@@ -1,6 +1,5 @@
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
-import random
 
 class NewsService:
     """Mock news service with deterministic results"""

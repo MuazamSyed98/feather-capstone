@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings
 from typing import List
-import os
 
 class Settings(BaseSettings):
     SECRET_KEY: str = "change_me_in_production"

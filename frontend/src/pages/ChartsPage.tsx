@@ -9,23 +9,53 @@ export const ChartsPage = () => {
 
   const { data: history, isLoading, error } = usePriceHistory(selectedSymbol, 60)
 
-  // Always work with a local candles array so we can safely handle "no data yet"
-  const candles = history?.items ?? []
+  // Raw candles from API (Neon via backend)
+  const rawCandles = history?.items ?? []
+
+  // ✅ Ensure candles are sorted oldest -> newest so:
+  // - left side of chart = earliest
+  // - right side of chart = latest
+  const candles = [...rawCandles].sort((a, b) => {
+    const ta =
+      typeof a.timestamp === 'number'
+        ? a.timestamp
+        : Date.parse(a.timestamp) / 1000
+
+    const tb =
+      typeof b.timestamp === 'number'
+        ? b.timestamp
+        : Date.parse(b.timestamp) / 1000
+
+    return ta - tb
+  })
+
   const hasData = candles.length > 0
 
   // Map backend -> InteractiveChart shape
-  const chartData = candles.map((candle) => ({
-    time: candle.timestamp,
-    price: candle.close,
-    volume: candle.volume,
-    high: candle.high,
-    low: candle.low,
-    open: candle.open,
-    close: candle.close,
-  }))
+  const chartData = candles.map((candle) => {
+    let tsMs: number
 
-  const last = hasData ? candles[candles.length - 1] : undefined
-  const first = hasData ? candles[0] : undefined
+    if (typeof candle.timestamp === 'number') {
+      // Neon bigint seconds → ms
+      tsMs = candle.timestamp * 1000
+    } else {
+      const parsed = Date.parse(candle.timestamp)
+      tsMs = Number.isNaN(parsed) ? Date.now() : parsed
+    }
+
+    return {
+      time: new Date(tsMs).toISOString(),
+      price: candle.close,
+      volume: candle.volume,
+      high: candle.high,
+      low: candle.low,
+      open: candle.open,
+      close: candle.close,
+    }
+  })
+
+  const last = hasData ? candles[candles.length - 1] : undefined   // newest
+  const first = hasData ? candles[0] : undefined                    // oldest
 
   return (
     <div className="space-y-6">
@@ -62,11 +92,11 @@ export const ChartsPage = () => {
       {/* Only show charts when we *actually* have candles */}
       {hasData && last && first && (
         <>
-          {/* Summary card: now fed from backend candles */}
+          {/* Summary card powered by real candles */}
           <PriceChart
             symbol={selectedSymbol}
             data={{
-              price: last.close,
+              price: last.close,  // latest close
               change: last.close - first.close,
               changePercent: ((last.close - first.close) / first.close) * 100,
               volume: last.volume,

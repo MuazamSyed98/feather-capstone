@@ -3,8 +3,17 @@ import { Link, useLocation } from 'react-router-dom'
 import { NavBar } from './NavBar'
 import { Sidebar } from './Sidebar'
 import { useAuth } from '@/hooks/useAuth'
-import { Menu, X, TrendingUp, Sparkles, BarChart3, Shield, LineChart, Newspaper, Bell } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import {
+  Menu,
+  X,
+  TrendingUp,
+  Sparkles,
+  BarChart3,
+  Shield,
+  LineChart,
+  Newspaper,
+  Bell,
+} from 'lucide-react'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -27,17 +36,15 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-
-      {/* Fixed Navbar */}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+      {/* Fixed navbar at the top */}
       <NavBar user={user} onLogout={logout} />
 
-      {/* PAGE CONTENT BELOW NAV */}
-      <div className="flex pt-16">
-
-        {/* =============== DESKTOP SIDEBAR =============== */}
+      {/* Everything below the navbar */}
+      <div className="flex flex-1 pt-16 bg-gray-50 dark:bg-gray-900">
+        {/* DESKTOP SIDEBAR */}
         <div
-          className="hidden lg:flex lg:flex-col lg:inset-y-0"
+          className="hidden lg:flex lg:flex-col"
           onMouseEnter={() => setSidebarHovered(true)}
           onMouseLeave={() => setSidebarHovered(false)}
         >
@@ -48,23 +55,27 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           />
         </div>
 
-        {/* =============== MAIN CONTENT (NEVER OVERLAPPED) =============== */}
+        {/* MAIN CONTENT (never under the sidebar) */}
         <main className="flex-1 px-6 py-6 overflow-y-auto">
-          <div className="mx-auto max-w-7xl">
-            {children}
-          </div>
+          <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>
 
-      {/* =============== MOBILE SIDEBAR =============== */}
-      <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
+      {/* MOBILE SIDEBAR OVERLAY */}
+      <div
+        className={`fixed inset-0 z-50 lg:hidden ${
+          sidebarOpen ? 'block' : 'hidden'
+        }`}
+      >
         <div
           className="fixed inset-0 bg-gray-600 bg-opacity-75"
           onClick={() => setSidebarOpen(false)}
         />
         <div className="relative flex w-64 flex-col bg-white dark:bg-gray-800">
           <div className="flex h-16 items-center justify-between px-4">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">Feather</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
+              Feather
+            </span>
             <button
               onClick={() => setSidebarOpen(false)}
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -92,7 +103,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
       </div>
 
-      {/* Floating mobile menu button */}
+      {/* FLOATING MOBILE MENU BUTTON */}
       <button
         className="fixed bottom-4 right-4 z-40 lg:hidden"
         onClick={() => setSidebarOpen(true)}

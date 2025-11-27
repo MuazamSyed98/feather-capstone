@@ -133,9 +133,6 @@ export const PriceChart = ({ symbol, data, isLoading }: PriceChartProps) => {
 
         <div className="flex items-center space-x-2">
           <Activity className="h-4 w-4 text-gray-400" />
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            Mock Data
-          </span>
         </div>
       </div>
 

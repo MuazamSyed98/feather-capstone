@@ -31,7 +31,15 @@ export interface Prediction {
 
 // Price history types
 export interface PriceCandle {
-  timestamp: string
+  // extra fields we get back from Neon
+  id?: number
+  ticker?: string
+  created_at?: string
+
+  // Neon timestamp is a bigint (seconds) which becomes a JS number in JSON,
+  // but we might also get a string in some cases, so support both.
+  timestamp: number | string
+
   open: number
   high: number
   low: number
@@ -127,4 +135,3 @@ export interface ApiError {
     message: string
   }
 }
-

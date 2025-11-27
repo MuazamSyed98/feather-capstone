@@ -13,6 +13,7 @@ import type {
   Alert,
   PriceCandle,
   PriceHistoryResponse,
+  Quote,
 } from '@/types'
 
 // ----------------------------------------
@@ -116,7 +117,8 @@ export const authApi = {
 // TICKER API (Prediction + OHLCV History)
 // ================================================
 export const tickerApi = {
-  // 📌 GET PREDICTION
+  // existing getPrediction...
+
   getPrediction: async (symbol: string): Promise<PredictionResponse> => {
     const res = await api.get(`/api/stocks/${symbol}/prediction`)
     const raw: any = res.data
@@ -124,16 +126,14 @@ export const tickerApi = {
     const targetPrice = Number(raw.predicted_price)
     const horizonDays = Number(raw.horizon_days ?? 0)
 
-    // We don't get % change or confidence from backend yet,
-    // so we keep them neutral / placeholder for now.
-    const response: PredictionResponse = {
+    return {
       symbol: (raw.ticker || symbol).toUpperCase(),
       asOf: raw.created_at || new Date().toISOString(),
       prediction: {
-        deltaPct: 0,          // placeholder until backend sends it
-        direction: 'up',      // default direction (used for icon colour)
-        confidence: 0.7,      // placeholder confidence
-        // @ts-ignore - extra fields if you've extended Prediction
+        deltaPct: 0,
+        direction: 'up',
+        confidence: 0.7,
+        // @ts-ignore
         targetPrice,
         // @ts-ignore
         horizonDays,
@@ -143,26 +143,31 @@ export const tickerApi = {
         version: '0.0.1',
       },
     }
-
-    return response
   },
 
-  // 📌 GET OHLCV HISTORY
+  // existing getHistory...
+
   getHistory: async (
     symbol: string,
     limit = 60
   ): Promise<PriceHistoryResponse> => {
-    const res = await api.get<PriceCandle[]>(
-      `/api/stocks/${symbol}/history`,
-      { params: { limit } }
-    )
+    const res = await api.get<PriceCandle[]>(`/api/stocks/${symbol}/history`, {
+      params: { limit },
+    })
 
     return {
       symbol: symbol.toUpperCase(),
       items: res.data,
     }
   },
+
+  // ✅ NEW: GET QUOTE
+  getQuote: async (symbol: string): Promise<Quote> => {
+    const res = await api.get<Quote>(`/api/stocks/${symbol}/quote`)
+    return res.data
+  },
 }
+
 
 // ================================================
 // NEWS API
